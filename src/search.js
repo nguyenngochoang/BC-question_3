@@ -1,15 +1,89 @@
 $(document).ready(function(){
   $("#search-box").on('input', function(){
-    fetchData()
+    console.log(fetchData())
   });
 });
 
+// supposed that we have already had a server and an api to fetch json data, and the request was sucessful
+//TODO: Write prototype for suggestionTerm, collection and product.
+// Data should be like this: { suggestionTerms: [{}...], collections: [{}...], products: [{}....] }
 function fetchData() {
-  $.ajax({
-    url: "generated.json",
-    dataType : 'json',
-    context: document.body,
-  }).done(function(response) {
-    console.log(response)
-  });
+  return [
+    {
+      "suggestionTerm": {
+        "term": "crop top",
+        "url": "google.com"
+      },
+      "collection": {
+        "id": "62d042cedf55cc64c5b35fa5",
+        "title": "tops",
+        "url": "google.com"
+      },
+      "product": {
+        "id": "62d042ce0e65fe24284b75a1",
+        "title": "Black crop top",
+        "url": "google.com",
+        "brand": "SomeBrand",
+        "price": "$99",
+        "image": "https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg?20071023120759"
+      }
+    },
+    {
+      "suggestionTerm": {
+        "term": "top sportwear",
+        "url": "google.com"
+      },
+      "collection": {
+        "id": "62d042ce3842622bdd4b3da3",
+        "title": "tops",
+        "url": "google.com"
+      },
+      "product": {
+        "id": "62d042ce0561114f9209e905",
+        "title": "Top for sport wear",
+        "url": "google.com",
+        "brand": "SomeBrand",
+        "price": "$99",
+        "image": "https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg?20071023120759"
+      }
+    },
+    {
+      "suggestionTerm": {
+        "term": "shoe",
+        "url": "google.com"
+      },
+      "collection": {
+        "id": "62d042ced672c674b745aac4",
+        "title": "shoes",
+        "url": "google.com"
+      },
+      "product": {
+        "id": "62d042ce315339b218b3f55c",
+        "title": "Nike hot shoe",
+        "url": "google.com",
+        "brand": "SomeBrand",
+        "price": "$99",
+        "image": "https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg?20071023120759"
+      }
+    },
+    {
+      "suggestionTerm": {
+        "term": "walking shoe",
+        "url": "google.com"
+      },
+      "collection": {
+        "id": "62d042ce1454ae5dc97ae11f",
+        "title": "shoes",
+        "url": "google.com"
+      },
+      "product": {
+        "id": "62d042ce0ba566175d42f10a",
+        "title": "Adidas walking shoe",
+        "url": "google.com",
+        "brand": "SomeBrand",
+        "price": "$99",
+        "image": "https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg?20071023120759"
+      }
+    }
+  ]
 }
