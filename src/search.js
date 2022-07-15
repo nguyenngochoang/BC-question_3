@@ -2,6 +2,7 @@ const ACCESS_TOKEN = 'kowlp6zufxm98hgqsf09jhbfll0ig4n3jahlzrly'
 $(document).ready(function(){
   let serverResponse = ''
   let blockKeys = ''
+  let order = {}
   const searchInputContainer = document.getElementById('search-input-container')
 
   fetchData()
@@ -72,20 +73,23 @@ $(document).ready(function(){
     const suggestionObject = new SearchData(response.suggestions, searchBoxKey)
     const collectionObject = new SearchData(response.collections, searchBoxKey)
     const productObject = new SearchData(response.products, searchBoxKey)
+    const orderElement = document.getElementById('search-box').getAttribute('order')
+    const orders = orderElement ? orderElement.split(',') : ['0','1','2']
+    const blocks = [
+      createSuggestionsBlock(suggestionObject),
+      createCollectionsBlock(collectionObject),
+      createProductsBlock(productObject)
+    ]
 
-    if(document.getElementById('suggestions-config').checked) {
-      createSuggestionsBlock(container, suggestionObject)
-    }
-    if(document.getElementById('collections-config').checked) {
-      createCollectionsBlock(container, collectionObject)
-    }
-    if(document.getElementById('products-config').checked) {
-      createProductsBlock(container, productObject)
-    }
+    orders.forEach(order => {
+      container.innerHTML += blocks[parseInt(order)]
+    })
   }
 
 
-  function createSuggestionsBlock(container, suggestionObject) {
+  function createSuggestionsBlock(suggestionObject) {
+    if(!document.getElementById('suggestions-config').checked) return;
+
     let elements = ''
     const title = `<p class='bg-secondary text-white pl-2'> Suggestions </p>`
     elements += title
@@ -97,39 +101,45 @@ $(document).ready(function(){
       }
     })
 
-    container.innerHTML += blockContainerCreator(elements, {id: 'suggestion-container'})
+    return blockContainerCreator(elements, {id: 'suggestion-container'})
   }
-  function createCollectionsBlock(container, collectionObject) {
+  function createCollectionsBlock(collectionObject) {
+    if(!document.getElementById('collections-config').checked) return;
+
     let elements = ''
     const title = `<p class='bg-secondary text-white pl-2'> Collections </p>`
     elements += title
 
     collectionObject.dataList.forEach((collection) => {
       if(collection.title.toLowerCase().includes(collectionObject.searchKey)) {
-        const collectionTitle = `<a href='${collection.url}' class='pl-2 text-dark d-block mb-1 text-truncate'>${collection.title}</a>`
+        const collectionTitle = `<a href='${collection.url}' class='colletion-title pl-2 text-dark d-block mb-1 text-truncate'>${collection.title}</a>`
         elements += collectionTitle
       }
     })
-    container.innerHTML += blockContainerCreator(elements, {id: 'collection-container'})
+
+    return blockContainerCreator(elements, {id: 'collection-container'})
   }
 
-  function createProductsBlock(container, productObject) {
+  function createProductsBlock(productObject) {
+    if(!document.getElementById('products-config').checked) return;
+
     let elements = ''
     const title = `<p class='bg-secondary text-white pl-2'> Products </p>`
     elements += title
 
     productObject.dataList.forEach((product) => {
-      if(product.title.toLowerCase().includes(productObject.searchKey)) {
-        const productImage = `<div class='col-6 col-md-3'><img src='${product.image}' class='w-100'/></div>`
-        const productTitle = `<p class='mb-1 text-truncate'>${product.title}</p>`
-        const productBrand = `<p class='text-truncate'> ${product.brand} </p>`
-        const productPrice = `<p class='font-weight-bold'> ${product.price} </p>`
+      if(product.title.toLowerCase().includes(productObject.searchKey) || product.brand.toLowerCase().includes(productObject.searchKey)) {
+        const productImage = `<div class='product-image-container col-6 col-md-3'><img src='${product.image}' class='product-image w-100'/></div>`
+        const productTitle = `<p class='product-title mb-1 text-truncate'>${product.title}</p>`
+        const productBrand = `<p class='product-brand text-truncate'> ${product.brand} </p>`
+        const productPrice = `<p class='product-price font-weight-bold'> ${product.price} </p>`
         const productInfo = `<div class='col-6 col-md-9'> ${productTitle}${productBrand}${productPrice} </div>`
 
         elements += blockContainerCreator(productImage + productInfo, {tag: 'a', class: 'row w-100 mx-0 border-bottom text-dark text-decoration-none', href: product.url})
       }
     })
-    container.innerHTML += blockContainerCreator(elements, {id: 'product-container'})
+
+    return blockContainerCreator(elements, {id: 'product-container'})
   }
 
   function blockContainerCreator(elements, options={}) {
