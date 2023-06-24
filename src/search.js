@@ -16,6 +16,7 @@ $(document).ready(function(){
 
   $(document.body).on('click', '.config-container' ,function(e){
     createSearchResultBox(serverResponse)
+    console.log("ok")
   })
 
   function SearchData(dataList, searchKey) {
